@@ -1,0 +1,4 @@
+4/5/23  11:24 pm est
+
+CREATE TABLE `craftybymelissa_dev`.`games` (`game_id` INT NOT NULL AUTO_INCREMENT , `game_name` TEXT NOT NULL , `game_description` TEXT NOT NULL , PRIMARY KEY (`game_id`)) ENGINE = InnoDB;
+
