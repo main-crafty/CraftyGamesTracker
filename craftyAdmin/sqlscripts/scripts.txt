@@ -6,3 +6,12 @@ CREATE TABLE `games` (
   `game_description` text COLLATE utf8mb4_general_ci NOT NULL COMMENT 'description of what game is and how to play',
   `deleted` tinyint NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `users` (
+  `userID` int NOT NULL,
+  `username` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nickname` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `tiktok` tinyint(1) NOT NULL,
+  `deleted` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
