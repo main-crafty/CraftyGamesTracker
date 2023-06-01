@@ -1,4 +1,17 @@
 4/5/23  11:24 pm est
 
-CREATE TABLE `craftybymelissa_dev`.`games` (`game_id` INT NOT NULL AUTO_INCREMENT , `game_name` TEXT NOT NULL , `game_description` TEXT NOT NULL , PRIMARY KEY (`game_id`)) ENGINE = InnoDB;
+CREATE TABLE `games` (
+  `game_id` int NOT NULL,
+  `game_name` text COLLATE utf8mb4_general_ci NOT NULL COMMENT 'name of current game being played',
+  `game_description` text COLLATE utf8mb4_general_ci NOT NULL COMMENT 'description of what game is and how to play',
+  `deleted` tinyint NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+CREATE TABLE `users` (
+  `userID` int NOT NULL,
+  `username` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nickname` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `tiktok` tinyint(1) NOT NULL,
+  `deleted` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
