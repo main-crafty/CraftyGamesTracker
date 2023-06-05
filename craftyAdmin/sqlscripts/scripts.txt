@@ -15,3 +15,10 @@ CREATE TABLE `users` (
   `tiktok` tinyint(1) NOT NULL,
   `deleted` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `userXgames` (
+  `userXgameID` int NOT NULL,
+  `userID` int NOT NULL,
+  `gameID` int NOT NULL,
+  `deleted` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
