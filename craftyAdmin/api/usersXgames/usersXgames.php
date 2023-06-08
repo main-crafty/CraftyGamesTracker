@@ -60,6 +60,12 @@
         echo $myJson;
     } else if ($_SERVER["REQUEST_METHOD"]==="POST"){
         try{
+            $json = file_get_contents("php://input");
+            $data = json_decode($json);
+            $userID = $data -> userID;
+            $gameID = $data -> gameID;
+            $deleted = $data -> deleted;
+
             $myData = "INSERT INTO userXgames (userID, gameID, deleted)
             VALUES ('$userID', '$gameID', '$deleted')"; 
             $data -> SQL = $myData;
