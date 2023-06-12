@@ -11,7 +11,6 @@
     $game_id = $_GET["game_id"];
     $newGame=$_GET["newGame"];
     $gameDescription=$_GET["gameDescription"];
-    
 
     if ($_SERVER["REQUEST_METHOD"]==="GET" && $game_id !== null){
         try {
