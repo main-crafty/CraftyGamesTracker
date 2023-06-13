@@ -1,24 +1,31 @@
 4/5/23  11:24 pm est
 
 CREATE TABLE `games` (
-  `game_id` int NOT NULL,
-  `game_name` text COLLATE utf8mb4_general_ci NOT NULL COMMENT 'name of current game being played',
-  `game_description` text COLLATE utf8mb4_general_ci NOT NULL COMMENT 'description of what game is and how to play',
-  `deleted` tinyint NOT NULL DEFAULT '0'
+  `game_id` int AUTO_INCREMENT NOT NULL,
+  `game_name` VARCHAR(255) COLLATE utf8mb4_general_ci UNIQUE NOT NULL,
+  `game_description` VARCHAR(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  primary key (game_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `users` (
-  `userID` int NOT NULL,
-  `username` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `nickname` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `tiktok` tinyint(1) NOT NULL,
-  `deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+        `userID` int AUTO_INCREMENT NOT NULL,
+        `username` varchar(100) COLLATE utf8mb4_general_ci UNIQUE NOT NULL,
+        `nickname` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+        `tiktok` tinyint(1) NOT NULL,
+        `tiktokName` varchar(100) COLLATE utf8mb4_general_ci UNIQUE NOT NULL,
+        `deleted` tinyint(1) NOT NULL DEFAULT 0,
+        primary key (userID)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `userXgames` (
-  `userXgameID` int NOT NULL,
+  `userXgameID` int AUTO_INCREMENT NOT NULL,
   `userID` int NOT NULL,
   `gameID` int NOT NULL,
-  `deleted` tinyint(1) NOT NULL
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  primary key (userXgameID),
+  foreign key (userID) references users(userID),
+  foreign key (gameID) references games(game_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
