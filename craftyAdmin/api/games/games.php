@@ -43,8 +43,15 @@
     echo $myJson;
     } else if($_SERVER["REQUEST_METHOD"]==="POST"){
     try{
-        $myData = "INSERT INTO games (game_name, game_description)
-        VALUES ('$newGame', '$gameDescription')";
+        $json = file_get_contents("php://input");
+        $data = json_decode($json);
+        $game_id = $data -> game_id;
+        $game_name = $data -> game_name;
+        $game_description = $data -> game_description;
+        $deleted = $data -> deleted;
+
+        $myData = "INSERT INTO games (game_name, game_description,deleted)
+        VALUES ('$game_name', '$game_description','$deleted')";
         $data-> SQL=$myData;
         $conn-> exec($myData);
     } catch (PDOException $error) {
