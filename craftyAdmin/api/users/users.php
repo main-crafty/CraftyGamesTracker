@@ -45,6 +45,14 @@
         echo $myJson;
     } else if ($_SERVER["REQUEST_METHOD"]==="POST"){
         try{
+            $json = file_get_contents("php://input");
+            $data = json_decode($json);
+            $userID = $data -> userID;
+            $username = $data -> username;
+            $nickname = $data -> nickname;
+            $tiktok = $data -> tiktok;
+            $deleted = $data -> deleted;
+
             $myData = "INSERT INTO users (username, nickname, tiktok, deleted)
             VALUES ('$username','$nickname','$tiktok', '$deleted')";
             $data -> SQL = $myData;
