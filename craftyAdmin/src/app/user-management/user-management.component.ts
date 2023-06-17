@@ -9,16 +9,17 @@ import { User } from '../interfaces';
 })
 export class UserManagementComponent implements OnInit {
 
-  users : User[] = []
+  users: User[] = []
 
-  displayedColumns: User[] = [];
-  dataSource = this.users;
+  displayedColumns: string[] = ['id', 'name'];
+  dataSource: User[] = [];
+
 
   constructor(private dataService: DataService){}
   ngOnInit(): void {
     
   this.users = this.dataService.getUsers();
-
+  this.dataSource = this.users;
   
 }
 
