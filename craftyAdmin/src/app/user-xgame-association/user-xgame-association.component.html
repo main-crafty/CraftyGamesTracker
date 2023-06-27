@@ -1,5 +1,70 @@
-<h1>Users</h1>
-<li *ngFor="let userXgame of userXgame">
-    <span>{{userXgame.id}} userId: {{userXgame.userId}} gameId: {{userXgame.gameId}}</span>
 
-</li>
+<table
+  mat-table
+  [dataSource]="dataSource"
+  multiTemplateDataRows
+  class="mat-elevation-z8"
+>
+  <ng-container
+    matColumnDef="{{column}}"
+    *ngFor="let column of columnsToDisplay"
+  >
+    <th mat-header-cell *matHeaderCellDef>{{column}}</th>
+    <td mat-cell *matCellDef="let userXgame">{{userXgame[column]}}</td>
+  </ng-container>
+  <ng-container matColumnDef="expand">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+    <td mat-cell *matCellDef="let userXgame">
+        <button
+        mat-icon-button
+        aria-label="expand row"
+        (click)="(expandedUserXGame = expandedUserXGame === userXgame ? null : userXgame ); $event.stopPropagation()"
+      >
+      <mat-icon *ngIf="expandedUserXGame !== usersXgames"
+          >keyboard_arrow_down</mat-icon
+        >
+        <mat-icon *ngIf="expandedUserXGame === usersXgames"
+          >keyboard_arrow_up</mat-icon
+        >
+        </button>
+        </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="expandedDetail">
+            <td
+              mat-cell
+              *matCellDef="let userXgame"
+              [attr.colspan]="columnsToDisplayWithExpand.length"
+            >
+              <div
+                class="example-element-detail"
+                [@userXgameDetailExpand]="userXgame == expandedUserXGame ? 'expanded' : 'collapsed'"
+              >
+                <div class="example-element-description">
+                  <div class="inputContainer">
+                  <div><input placeholder="change userId" /></div>
+                  <div><input placeholder="change gameId" /></div>
+                  <div><input placeholder="change deleted" /></div>
+                  <button>submit</button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+          <tr
+            mat-row
+            *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+            class="example-element-row"
+            [class.example-expanded-row]="expandedUserXGame === element"
+            (click)="expandedUserXGame = expandedUserXGame === element ? null : element"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['expandedDetail']"
+            class="example-detail-row"
+          ></tr>
+</table>    
+

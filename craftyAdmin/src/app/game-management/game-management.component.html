@@ -1,4 +1,68 @@
-<h1>Games</h1>
-<li *ngFor="let game of games">
-    <span>{{game.id}} : {{game.gameName}}</span>
-</li>
+<table
+  mat-table
+  [dataSource]="dataSource"
+  multiTemplateDataRows
+  class="mat-elevation-z8"
+>
+  <ng-container
+    matColumnDef="{{column}}"
+    *ngFor="let column of columnsToDisplay"
+  >
+    <th mat-header-cell *matHeaderCellDef>{{column}}</th>
+    <td mat-cell *matCellDef="let game">{{game[column]}}</td>
+  </ng-container>
+  <ng-container matColumnDef="expand">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+    <td mat-cell *matCellDef="let game">
+        <button
+        mat-icon-button
+        aria-label="expand row"
+        (click)="(expandedGame = expandedGame === game ? null : game ); $event.stopPropagation()"
+      >
+      <mat-icon *ngIf="expandedGame !== game"
+          >keyboard_arrow_down</mat-icon
+        >
+        <mat-icon *ngIf="expandedGame === game"
+          >keyboard_arrow_up</mat-icon
+        >
+        </button>
+        </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="expandedDetail">
+            <td
+              mat-cell
+              *matCellDef="let game"
+              [attr.colspan]="columnsToDisplayWithExpand.length"
+            >
+              <div
+                class="example-element-detail"
+                [@detailExpand]="game == expandedGame ? 'expanded' : 'collapsed'"
+              >
+                <div class="example-element-description">
+                  <div class="inputContainer">
+                  <div><input placeholder="change game name" /></div>
+                  <div><input placeholder="change game description" /></div>
+                  <div><input placeholder="change deleted" /></div>
+                  <button>submit</button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+          <tr
+            mat-row
+            *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+            class="example-element-row"
+            [class.example-expanded-row]="expandedGame === element"
+            (click)="expandedGame = expandedGame === element ? null : element"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['expandedDetail']"
+            class="example-detail-row"
+          ></tr>
+</table>    

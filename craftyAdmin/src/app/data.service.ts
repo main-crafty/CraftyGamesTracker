@@ -1,70 +1,98 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { User } from './interfaces';
 import { Game } from './interfaces';
 import { UserXGame } from './interfaces';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
-
+export class DataService{
+  
   users: User[] = [];
   games: Game[] = [];
-  UserXGame : UserXGame[] = [];
+  userXGame : UserXGame[] = [];
 
-  constructor() { 
-    this.setUsers();
-    this.setGames();
-    this.setUserXGames();
+  req = this.http.get<User>('http://gtlex-admin.chemx.xyz/api/api/users/users.php');
+  
+
+  usersObservable: BehaviorSubject<User[]> = new BehaviorSubject(this.users);
+  gamesObservable: BehaviorSubject<Game[]> = new BehaviorSubject(this.games);
+  userXGamesObservable: BehaviorSubject<UserXGame[]> = new BehaviorSubject(this.userXGame)
+  
+  constructor(private http: HttpClient) { 
+    //console.log('init...');
+    setTimeout(
+      ()=>{
+
+        this.setUsers();
+        this.setGames();
+        this.setUserXGames();
+      }, 1000
+    )
   }
 
-  getUsers(){
 
-    return this.users;
-  }
+
+
+
   setUsers(){
-    this.users.push({
-      id: 1,
-      username:"Marty Trujillo",
-      nickname: "Marty",
-      tiktok: true,
-      tiktokName:"MartyILikeToParty",
-      deleted: false
-    },
-    {
-      id: 2,
-      username:"Melissa Trujillo",
-      nickname: "Melissa",
-      tiktok: true,
-      tiktokName:"CraftyByMelissa",
-      deleted: false
-    },
-    {
-      id: 3,
-      username:"Alexander Trujillo",
-      nickname: "Lex",
-      tiktok: false,
-      tiktokName:"N/A",
-      deleted: false
-    },
-    {
-      id: 4,
-      username:"Anastasia Trujillo",
-      nickname: "Ana",
-      tiktok: true,
-      tiktokName:"AnaBanana",
-      deleted: false
-    },
-    {
-      id: 5,
-      username:"Rodrick Trujillo",
-      nickname: "Rod",
-      tiktok: true,
-      tiktokName:"Capn Kujo",
-      deleted: false
-    }
-    );
+    console.log('begin set new users...');
+
+    this.req.subscribe(
+      (users: any): void=>
+      {
+        console.log('out user',users);
+        this.users = users.data;
+        this.usersObservable.next(this.users);
+
+      });
+
+    // this.users.push({
+    //   id: 1,
+    //   username:"Marty Trujillo",
+    //   nickname: "Marty",
+    //   tiktok: true,
+    //   tiktokName:"MartyILikeToParty",
+    //   deleted: false
+    // },
+    // {
+    //   id: 2,
+    //   username:"Melissa Trujillo",
+    //   nickname: "Melissa",
+    //   tiktok: true,
+    //   tiktokName:"CraftyByMelissa",
+    //   deleted: false
+    // },
+    // {
+    //   id: 3,
+    //   username:"Alexander Trujillo",
+    //   nickname: "Lex",
+    //   tiktok: false,
+    //   tiktokName:"N/A",
+    //   deleted: true
+    // },
+    // {
+    //   id: 4,
+    //   username:"Anastasia Trujillo",
+    //   nickname: "Ana",
+    //   tiktok: true,
+    //   tiktokName:"AnaBanana",
+    //   deleted: false
+    // },
+    // {
+    //   id: 5,
+    //   username:"Rodrick Trujillo",
+    //   nickname: "Rod",
+    //   tiktok: true,
+    //   tiktokName:"Capn Kujo",
+    //   deleted: false
+    // }
+    // );
+    //console.log('setting new users...');
+    this.usersObservable.next(this.users);
   }
   getGames(){
     return this.games;
@@ -89,12 +117,13 @@ export class DataService {
       deleted:false
     }
     )
+    this.gamesObservable.next(this.games)
   }
   getUserXGames(){
-    return this.UserXGame;
+    return this.userXGame;
   }
   setUserXGames(){
-    this.UserXGame.push({
+    this.userXGame.push({
       id:1,
       userId:1,
       gameId:1,
@@ -113,5 +142,6 @@ export class DataService {
       deleted:false
     }
     )
+    this.userXGamesObservable.next(this.userXGame)
   }
 }

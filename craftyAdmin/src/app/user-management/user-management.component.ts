@@ -2,26 +2,39 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { User } from '../interfaces';
 
+import {animate, state, style, transition, trigger} from '@angular/animations';
+
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.scss']
+  styleUrls: ['./user-management.component.scss'],
+  animations: [
+    trigger('userDetailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class UserManagementComponent implements OnInit {
 
-  users: User[] = []
-
-  displayedColumns: string[] = ['id', 'name'];
+  columnsToDisplay = ['userID', 'username', 'nickname', 'tiktok','tikTokName', 'deleted'];
+  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   dataSource: User[] = [];
-
-
-  constructor(private dataService: DataService){}
+  users: User[] = [];
+  expandedUser: User[] = [];
+  
+  constructor( private dataService: DataService){}
+  
   ngOnInit(): void {
     
-  this.users = this.dataService.getUsers();
-  this.dataSource = this.users;
-  
-}
+    this.dataService.usersObservable.subscribe(
+      (users:User[])=>{
+      console.log(users,"ASKDFJWEIFJIO")
+    this.users = users;
+    this.dataSource = structuredClone(this.users);
+    });
 
+  }
  
 }
