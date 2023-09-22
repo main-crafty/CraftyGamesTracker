@@ -1,3 +1,11 @@
+<input class = "filterGames" placeholder="filter games" (keyup)="gameStringFilter($event)">
+<section class="hideActive">
+  <mat-checkbox class="example-margin" (change)="hideActive()">Hide Active</mat-checkbox>
+</section>
+<section class="showDeleted">
+  <mat-checkbox class="example-margin" (change)="showDeleted()">Show Deleted</mat-checkbox>
+</section>
+
 <table
   mat-table
   [dataSource]="dataSource"
@@ -17,7 +25,7 @@
         <button
         mat-icon-button
         aria-label="expand row"
-        (click)="(expandedGame = expandedGame === game ? null : game ); $event.stopPropagation()"
+        (click)="toggleGame(game, $event)"
       >
       <mat-icon *ngIf="expandedGame !== game"
           >keyboard_arrow_down</mat-icon
@@ -38,15 +46,18 @@
             >
               <div
                 class="example-element-detail"
-                [@detailExpand]="game == expandedGame ? 'expanded' : 'collapsed'"
+                [@detailExpand]="expandedGameID == game.gameID ? 'expanded' : 'collapsed'"
               >
                 <div class="example-element-description">
+                  <form [formGroup]="gamePatchForm">
                   <div class="inputContainer">
-                  <div><input placeholder="change game name" /></div>
-                  <div><input placeholder="change game description" /></div>
-                  <div><input placeholder="change deleted" /></div>
-                  <button>submit</button>
+                  <div><input formControlName="gameName" [value]="expandedGameName" placeholder="change game name" /></div>
+                  <div><input formControlName="gameDescription" [value]=" expandedGameDescription"  placeholder="change game description" /></div>
+                  <div><input formControlName="deleted" [value]="game.deleted"  placeholder="change deleted" /></div>
+                  <button (click)="patchedGame(game.gameID)">submit</button>
+                  <button (click)="softDeleteGame(game.gameID)">delete</button>
                   </div>
+                </form>
                 </div>
               </div>
             </td>
@@ -58,7 +69,7 @@
             *matRowDef="let element; columns: columnsToDisplayWithExpand;"
             class="example-element-row"
             [class.example-expanded-row]="expandedGame === element"
-            (click)="expandedGame = expandedGame === element ? null : element"
+            (click)="expandedGame = expandedGame === element ? null : element; toggleGame(element, $event)"
           ></tr>
           <tr
             mat-row
@@ -66,3 +77,5 @@
             class="example-detail-row"
           ></tr>
 </table>    
+
+<button mat-raised-button (click)="openDialog('0ms', '0ms')">Create Game</button>

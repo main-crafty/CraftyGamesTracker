@@ -55,3 +55,26 @@ table {
     flex-direction: row;
   }
   
+  .showDeleted{
+    position: relative;
+    margin-top: -3px;
+    float: right;
+    right: -162px;
+    top: 0px;
+  }
+  
+  .hideActive{
+    position: relative;
+    margin-top: -3px;
+    float: right;
+    right: -162px;;
+    top: 0px;
+  }
+  
+  .filterGames{
+    position: relative;
+    margin-top: 7px;
+    float: right;
+    right: 260px;
+    top: 0px;
+  }

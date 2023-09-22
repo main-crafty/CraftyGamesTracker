@@ -8,13 +8,13 @@
     $data = new stdClass();
     $data -> name = "testgame";
 
-    $game_id = $_GET["game_id"];
+    $gameID = $_GET["gameID"];
     $newGame=$_GET["newGame"];
     $gameDescription=$_GET["gameDescription"];
 
-    if ($_SERVER["REQUEST_METHOD"]==="GET" && $game_id !== null){
+    if ($_SERVER["REQUEST_METHOD"]==="GET" && $gameID !== null){
         try {
-            $stmt= $conn -> prepare("SELECT * FROM games WHERE game_id = ${game_id}");
+            $stmt= $conn -> prepare("SELECT * FROM games WHERE gameID = ${gameID}");
             $stmt -> execute();
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $myData = $stmt->fetchAll();
@@ -44,13 +44,13 @@
     try{
         $json = file_get_contents("php://input");
         $data = json_decode($json);
-        $game_id = $data -> game_id;
-        $game_name = $data -> game_name;
-        $game_description = $data -> game_description;
+        $gameID = $data -> gameID;
+        $gameName = $data -> gameName;
+        $gameDescription = $data -> gameDescription;
         $deleted = $data -> deleted;
 
-        $myData = "INSERT INTO games (game_name, game_description,deleted)
-        VALUES ('$game_name', '$game_description','$deleted')";
+        $myData = "INSERT INTO games (gameName, gameDescription,deleted)
+        VALUES ('$gameName', '$gameDescription','$deleted')";
         $data-> SQL=$myData;
         $conn-> exec($myData);
     } catch (PDOException $error) {
@@ -63,7 +63,7 @@
         
      } else if($_SERVER["REQUEST_METHOD"]==="DELETE"){
     try{
-        $myData = "UPDATE games SET deleted=1 WHERE game_id= ${game_id}";
+        $myData = "UPDATE games SET deleted=1 WHERE gameID= ${gameID}";
         $data-> SQL = $myData;
         $conn -> exec($myData);
     } catch (PDOException $error) {
@@ -77,13 +77,13 @@
     } else if($_SERVER["REQUEST_METHOD"]==="PUT"){
         $json = file_get_contents("php://input");
         $data = json_decode($json);
-        $game_id = $data -> game_id;
-        $game_name = $data -> game_name;
-        $game_description = $data -> game_description;
+        $gameID = $data -> gameID;
+        $gameName = $data -> gameName;
+        $gameDescription = $data -> gameDescription;
         $deleted = $data -> deleted;
 
-        $sql = "UPDATE games SET game_name = '$game_name',  game_description = '$game_description', 
-        deleted = '$deleted' WHERE game_id = '$game_id'";
+        $sql = "UPDATE games SET gameName = '$gameName',  gameDescription = '$gameDescription', 
+        deleted = '$deleted' WHERE gameID = '$gameID'";
 
         $conn -> exec($sql);
         if($conn->query($sql)=== TRUE){
@@ -98,20 +98,20 @@
     } else if($_SERVER["REQUEST_METHOD"]==="PATCH"){
         $json = file_get_contents("php://input");
         $data = json_decode($json);
-        $game_id = $data -> game_id;
-        $game_name = $data -> game_name;
-        $game_description = $data -> game_description;
+        $gameID = $data -> gameID;
+        $gameName = $data -> gameName;
+        $gameDescription = $data -> gameDescription;
         $deleted = $data -> deleted;
 
         $columnValuePair = array();
 
         $sql = "UPDATE games SET ";
 
-        if($game_name != ""){
-            array_push($columnValuePair, "game_name = '$game_name'");
+        if($gameName != ""){
+            array_push($columnValuePair, "gameName = '$gameName'");
         }
-        if($game_description != ""){
-            array_push($columnValuePair, "game_description = '$game_description'");
+        if($gameDescription != ""){
+            array_push($columnValuePair, "gameDescription = '$gameDescription'");
         }
         if($deleted != ""){
             array_push($columnValuePair, "deleted = '$deleted'");
@@ -121,7 +121,7 @@
 
         $sql .= $comma_separated;
 
-        $sql .= " WHERE game_id = '$game_id'";
+        $sql .= " WHERE gameID = '$gameID'";
 
         $conn -> exec($sql);
 

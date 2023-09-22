@@ -54,4 +54,28 @@ table {
     width: 100%;
     flex-direction: row;
   }
+
+  .showDeleted{
+    position: relative;
+    margin-top: -3px;
+    float: right;
+    right: -162px;
+    top: 0px;
+  }
+  
+  .hideActive{
+    position: relative;
+    margin-top: -3px;
+    float: right;
+    right: -162px;;
+    top: 0px;
+  }
+  
+  .filterUsersXGames{
+    position: relative;
+    margin-top: 7px;
+    float: right;
+    right: 260px;
+    top: 0px;
+  }
   

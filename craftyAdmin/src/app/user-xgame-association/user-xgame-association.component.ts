@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
-import { UserXGame } from '../interfaces';
+import { UserXGame, User, Game, UiUserXGame } from '../interfaces';
 
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { MatDialog } from '@angular/material/dialog';
+import { AddAssociationComponent } from './add-association/add-association.component';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-user-xgame-association',
@@ -18,21 +22,262 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 })
 export class UserXgameAssociationComponent implements OnInit{
 
-  columnsToDisplay = ['id', 'userId', 'gameId', 'deleted'];
+  columnsToDisplay = ['userID', 'username', 'gameID', 'gameName'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   dataSource: UserXGame[] = [];
+  uiUsersXgames:  UiUserXGame[] = [];
   usersXgames: UserXGame[] = [];
-  expandedUserXGame: UserXGame[] = [];
+  users: User[] = [];
+  games: Game[] = [];
 
-  constructor( private dataService: DataService){}
+  expandedUserXGame: UiUserXGame | undefined;
+  expandedUserXGameUserID: number | undefined;
+  expandedUserXGameGameID: number | undefined;
+
+  newUserID : number | undefined;
+  newGameID : number | undefined;
+
+  expandedUserID: number | undefined;
+  expandedUsername : string | undefined;
+
+  expandedGameID: number | undefined;
+  expandedGamename : string | undefined;
+  
+
+  constructor( private dataService: DataService, public dialog: MatDialog){}
   
   ngOnInit(): void {
-    this.dataService.userXGamesObservable.subscribe((usersXgames:UserXGame[])=>{
-      this.usersXgames = this.dataService.getUserXGames();
-      this.dataSource = structuredClone(usersXgames)
+
+    this.dataService.userXGamesObservable.subscribe(
+      (userXgames:UserXGame[])=>{
+    this.usersXgames = userXgames;
+    this.dataSource = structuredClone(this.usersXgames).filter((userXgame:UserXGame)=>{
+      const isDeletedValue : number = userXgame.deleted as unknown as number; 
+      return isDeletedValue === 0;
+    });
+    });
+
+    this.dataService.userXGamesObservable.subscribe(
+      (userXgames: UiUserXGame[])=>{
+        this.usersXgames = userXgames;
+        this.mergeData();
+    });
+
+    this.dataService.usersObservable.subscribe(
+      (user:User[])=>{
+        this.users = user;
+        this.mergeData();
+      })
+
+    this.dataService.gamesObservable.subscribe(
+      (game:Game[])=>{
+      this.games= game;
+      this.mergeData();
     })
-    this.usersXgames = this.dataService.getUserXGames();
-    this.dataSource = this.usersXgames;
   }
 
+  toggleAtt(userXgame: UiUserXGame, event : MouseEvent)
+  {
+    if(this.expandedUserXGameUserID === undefined){
+      this.expandedUserXGameUserID = userXgame.userID;
+      this.expandedUserXGameGameID = userXgame.gameID
+    } else if(this.expandedUserXGameUserID !== undefined){
+      this.expandedUserXGameUserID = undefined;
+      this.expandedUserXGameGameID = undefined;
+    }
+
+    if(this.expandedUserXGameUserID !== userXgame.userID){
+        this.expandedUsername = undefined;
+        this.expandedGamename = undefined;
+      } else {
+        this.expandedUsername = userXgame.username;
+        this.expandedGamename = userXgame.gameName;
+    }
+
+    console.log("expanded",this.expandedGamename, "userXgame", userXgame.gameName)
+    console.log("userXgame",userXgame)
+
+    event.stopPropagation();
+  }
+
+  mergeData(): void
+  {
+    if (this.users.length > 0
+        && this.games.length > 0
+        && this.usersXgames.length > 0
+      )
+    {
+      this.usersXgames.forEach(
+        (userXGame: UserXGame) =>
+        {
+          const uiUserXGame: Partial<UiUserXGame> = userXGame;
+          
+          const userObject: User = this.users.find( (user: User) => user.userID === userXGame.userID ) as User;
+          
+          const gameObject: Game = this.games.find( (game: Game) => game.gameID === userXGame.gameID) as Game;
+          
+          uiUserXGame.username = userObject.username;
+
+          uiUserXGame.gameName = gameObject.gameName;
+
+          const finalUserGameRecord: UiUserXGame = uiUserXGame as UiUserXGame;
+
+          this.uiUsersXgames.push(finalUserGameRecord);
+        }
+      )
+      this.dataSource = this.usersXgames;
+    }
+  }
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open( AddAssociationComponent, {
+      width: '550px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+  }
+
+  userXGamePatchForm = new FormGroup({
+    userID : new FormControl(0),
+    gameID : new FormControl(0),
+    deleted : new FormControl(false)
+  });
+
+  userChange(event: MatSelectChange) : void
+  {
+    const selectedUser: User = event.value;
+    this.newUserID = selectedUser.userID;
+    // console.log(event, "event")
+    // console.log(selectedUser, selectedUser.username, "selectedUser");
+    // console.log(this.newUserID, "newUserID");
+  }
+
+  gameChange(event: MatSelectChange) : void
+  {
+    const selectedGame: Game = event.value;
+    this.newGameID = selectedGame.gameID;
+    // console.log(event, "event");
+    // console.log(selectedGame, selectedGame.gameName, "selectedGame")
+    // console.log(this.newGameID, "newGameID");
+  }
+
+  patchedUserXGame(userXgameID : number){
+    const userID : number = this.newUserID as number;
+    const gameID : number = this.newGameID as number;
+    const deleted : boolean = this.userXGamePatchForm.controls.deleted.value as boolean;
+
+    const changedUserXGame : Partial<UserXGame> = {userXgameID, userID, gameID, deleted};
+    console.log(userXgameID)
+    console.log("changedUserXGame",changedUserXGame)
+    this.dataService.patchUserXGame(
+      changedUserXGame
+    ).subscribe((userXGame)=>{
+      console.log(userXGame)
+    })
+
+    console.log(JSON.stringify(this.userXGamePatchForm.value))
+
+    setTimeout(
+      ()=>{
+        this.dataService.setUserXGames()
+      },1000
+    )
+  }
+
+  softDeleteUserXGame(userXgameID : number){
+    this.dataService.deleteUserXGames(userXgameID);
+
+    setTimeout(
+      ()=>{
+    this.dataService.userXGameReq.subscribe(
+      (usersXgames: any): void=>
+      {
+        this.usersXgames = usersXgames.data;
+        this.dataService.userXGamesObservable.next(this.usersXgames);
+
+      })
+    this.dataService.userXGamesObservable.next(this.usersXgames);
+      }, 1000
+    )
+  };
+
+  isShowing : boolean = false //shows deleted users
+  deletedCounter: number = 0;
+
+  showDeleted(){
+    this.toggleIsShowing()
+    this.dataSource = structuredClone(this.usersXgames)
+    
+    if(this.deletedCounter + 1){
+      this.dataSource = structuredClone(this.usersXgames).filter((userXgame)=>{
+        if(this.isShowing && this.isHiding){
+          
+          return true;
+        } else if (this.isShowing && this.isHiding === false){
+          const isDeletedValue : number = userXgame.deleted as unknown as number; 
+          return isDeletedValue === 1
+        } else if (this.isShowing === false && this.isHiding){
+          const isDeletedValue : number = userXgame.deleted as unknown as number;
+          return isDeletedValue === 0
+        }
+        
+      return false;
+      })
+    }
+    
+    }
+  toggleIsShowing(){
+    this.isShowing = !this.isShowing;  
+    this.deletedCounter = this.deletedCounter + 1
+  }
+
+  isHiding : boolean = true //hides active users
+  hideChange : number = 0
+  
+  hideActive(){
+    this.dataSource = structuredClone(this.usersXgames);
+    
+    if(this.hideChange + 1){
+      this.dataSource = structuredClone(this.usersXgames).filter((userXgame)=>{
+        if(this.isShowing && this.isHiding){
+          const deletedUsers : number = userXgame.deleted as unknown as number;
+        return deletedUsers
+          } else if (this.isShowing && this.isHiding === false){
+           return true
+        } else if (this.isShowing === false && this.isHiding){
+          return false;
+        }
+        const hiddenUsers : number = userXgame.deleted as unknown as number;
+        return hiddenUsers === 0;
+        
+        
+      })
+    }
+    this.toggleHideActive();
+  }
+
+  toggleHideActive(){
+    this.isHiding = !this.isHiding;
+    this.hideChange = this.hideChange + 1;
+  } 
+
+  userXgameStringFilter(event:any){
+    const userXGameInput : HTMLInputElement = document.querySelector(".filterUsersXGames") as unknown as HTMLInputElement;
+    const userXGameFilter = userXGameInput.value.toString()
+
+      this.dataSource = structuredClone(this.usersXgames).filter((userXgame)=>{
+      const foundUsersXGames = userXgame.userID;
+      const foundUserXGame = foundUsersXGames.toString();
+
+      if (foundUserXGame.includes(userXGameFilter))
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    })
+    
+  }
 }

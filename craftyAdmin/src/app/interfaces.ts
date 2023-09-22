@@ -1,23 +1,33 @@
 export interface User {
-    id: number;
+    userID?: number;
     username: string;
     nickname: string;
     tiktok: boolean;
     tiktokName:string;
-    deleted:boolean;
+    deleted?:boolean;
+    SQL?:string;
 }
 
 export interface Game {
-    id: number;
+    gameID?: number;
     gameName: string;
     gameDescription: string;
-    deleted: boolean;
+    deleted?: boolean;
 }
 
 export interface UserXGame{
-    id: number;
-    userId: number;
-    gameId: number;
-    deleted: boolean;
+    userXgameID?: number;
+    userID: number;
+    gameID: number;
+    deleted?: boolean;
+}
 
+export interface UiUserXGame
+{
+    userXgameID?: number;
+    userID: number;
+    username?: string;
+    gameID: number;
+    gameName?: string;
+    deleted?: boolean;
 }
