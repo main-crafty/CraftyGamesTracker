@@ -1,0 +1,17 @@
+{
+    "/api/api/users/users.php": {
+      "target": "http://gtlex-admin.chemx.xyz/api/api/users/users.php",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/api/api/games/games.php": {
+      "target": "http://gtlex-admin.chemx.xyz/api/api/games/games.php",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/api/api/usersXgames/usersXgames.php": {
+      "target": "http://gtlex-admin.chemx.xyz/api/api/usersXgames/usersXgames.php",
+      "secure": false,
+      "changeOrigin": true
+    }
+  }
