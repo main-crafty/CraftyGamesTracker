@@ -94,9 +94,6 @@ export class UserXgameAssociationComponent implements OnInit{
         this.expandedGamename = userXgame.gameName;
     }
 
-    console.log("expanded",this.expandedGamename, "userXgame", userXgame.gameName)
-    console.log("userXgame",userXgame)
-
     event.stopPropagation();
   }
 
@@ -125,7 +122,10 @@ export class UserXgameAssociationComponent implements OnInit{
           this.uiUsersXgames.push(finalUserGameRecord);
         }
       )
-      this.dataSource = this.usersXgames;
+      this.dataSource = this.usersXgames.filter((userXgame:UserXGame)=>{
+        const isDeletedValue : number = userXgame.deleted as unknown as number; 
+        return isDeletedValue === 0;
+      });
     }
   }
 
@@ -201,31 +201,31 @@ export class UserXgameAssociationComponent implements OnInit{
     )
   };
 
-  isShowing : boolean = false //shows deleted users
+  isShowing : boolean = true //shows deleted users
   deletedCounter: number = 0;
 
   showDeleted(){
-    this.toggleIsShowing()
+    
     this.dataSource = structuredClone(this.usersXgames)
     
-    if(this.deletedCounter + 1){
-      this.dataSource = structuredClone(this.usersXgames).filter((userXgame)=>{
-        if(this.isShowing && this.isHiding){
-          
-          return true;
-        } else if (this.isShowing && this.isHiding === false){
-          const isDeletedValue : number = userXgame.deleted as unknown as number; 
-          return isDeletedValue === 1
-        } else if (this.isShowing === false && this.isHiding){
-          const isDeletedValue : number = userXgame.deleted as unknown as number;
-          return isDeletedValue === 0
+      if(this.deletedCounter + 1){
+        this.dataSource = structuredClone(this.usersXgames).filter((userXgame)=>{
+          if(this.isShowing && this.isHiding){
+            return true;
+         } else if (this.isShowing && this.isHiding === false){
+            const isDeletedValue : number = userXgame.deleted as unknown as number; 
+            return isDeletedValue === 0
+         } else if (this.isShowing === false && this.isHiding){
+            const isDeletedValue : number = userXgame.deleted as unknown as number;
+            return isDeletedValue === 1
         }
         
       return false;
       })
+      }
+    this.toggleIsShowing()
     }
-    
-    }
+
   toggleIsShowing(){
     this.isShowing = !this.isShowing;  
     this.deletedCounter = this.deletedCounter + 1
@@ -241,14 +241,14 @@ export class UserXgameAssociationComponent implements OnInit{
       this.dataSource = structuredClone(this.usersXgames).filter((userXgame)=>{
         if(this.isShowing && this.isHiding){
           const deletedUsers : number = userXgame.deleted as unknown as number;
-        return deletedUsers
-          } else if (this.isShowing && this.isHiding === false){
+          return deletedUsers
+        } else if (this.isShowing && this.isHiding === false){
            return true
         } else if (this.isShowing === false && this.isHiding){
           return false;
         }
-        const hiddenUsers : number = userXgame.deleted as unknown as number;
-        return hiddenUsers === 0;
+      const hiddenUsers : number = userXgame.deleted as unknown as number;
+      return hiddenUsers === 0;
         
         
       })
@@ -263,11 +263,12 @@ export class UserXgameAssociationComponent implements OnInit{
 
   userXgameStringFilter(event:any){
     const userXGameInput : HTMLInputElement = document.querySelector(".filterUsersXGames") as unknown as HTMLInputElement;
-    const userXGameFilter = userXGameInput.value.toString()
+    const userXGameFilter = userXGameInput.value.toLocaleLowerCase()
 
-      this.dataSource = structuredClone(this.usersXgames).filter((userXgame)=>{
-      const foundUsersXGames = userXgame.userID;
-      const foundUserXGame = foundUsersXGames.toString();
+      this.dataSource = structuredClone(this.usersXgames).filter((userXgame : UiUserXGame)=>{
+      console.log(userXgame.username)
+      const foundUsersXGames = userXgame.username as string;
+      const foundUserXGame = foundUsersXGames.toLocaleLowerCase();
 
       if (foundUserXGame.includes(userXGameFilter))
       {
