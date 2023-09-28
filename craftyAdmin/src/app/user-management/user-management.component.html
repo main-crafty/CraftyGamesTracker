@@ -1,3 +1,7 @@
+<button mat-raised-button color="primary" (click)="openDialog('0ms', '0ms')">
+  <mat-icon fontIcon="add"></mat-icon>
+  Create
+</button>
 <input class = "filterUsers" placeholder="filter users" (keyup)="userStringFilter($event)">
 <section class="hideActive">
   <mat-checkbox class="example-margin" (change)="hideActive()">Hide Active</mat-checkbox>
@@ -85,7 +89,7 @@
           ></tr>
 </table>    
 
-<button mat-raised-button (click)="openDialog('0ms', '0ms')">Create User</button>
+
 
 
 

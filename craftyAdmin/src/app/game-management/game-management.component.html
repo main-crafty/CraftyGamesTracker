@@ -1,3 +1,10 @@
+<button
+  mat-raised-button
+  color="primary"
+  (click)="openDialog('0ms', '0ms')">
+  <mat-icon fontIcon="add"></mat-icon>
+  Create
+</button>
 <input class = "filterGames" placeholder="filter games" (keyup)="gameStringFilter($event)">
 <section class="hideActive">
   <mat-checkbox class="example-margin" (change)="hideActive()">Hide Active</mat-checkbox>
@@ -77,5 +84,3 @@
             class="example-detail-row"
           ></tr>
 </table>    
-
-<button mat-raised-button (click)="openDialog('0ms', '0ms')">Create Game</button>
