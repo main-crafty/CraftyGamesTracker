@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddAssociationComponent } from './add-association/add-association.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-user-xgame-association',
@@ -279,6 +280,21 @@ export class UserXgameAssociationComponent implements OnInit{
         return false;
       }
     })
-    
+  }
+
+  gameFilter(event: MatSelectChange):void
+    {
+    const userXGameFilter : UiUserXGame = event.value;
+    const filterResult = userXGameFilter.gameName
+
+    this.dataSource = structuredClone(this.usersXgames).filter((userXgame : UiUserXGame)=>{
+      const foundGame = userXgame.gameName as string;
+
+      if(foundGame == filterResult){
+        return true
+      } else {
+        return false
+      }
+    })
   }
 }
