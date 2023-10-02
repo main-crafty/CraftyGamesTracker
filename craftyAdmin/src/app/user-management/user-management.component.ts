@@ -193,22 +193,25 @@ export class UserManagementComponent implements OnInit {
     this.hideChange = this.hideChange + 1;
   }
     
-  userStringFilter(event:any){
-    const userInput : HTMLInputElement = document.querySelector(".filterUsers") as unknown as HTMLInputElement;
-    const userFilter = userInput.value.toLocaleLowerCase();
+  userStringFilter(event: KeyboardEvent){
+    const userInput : HTMLInputElement = event.target as HTMLInputElement;
 
-      this.dataSource = structuredClone(this.users).filter((user)=>{
-      const foundUsers = user.username;
-      const foundUser = foundUsers.toLocaleLowerCase();
+      this.dataSource = this.users
+      .filter((user) => {
+        const foundUserAttributes = `${user.username} ${user.nickname} ${user.tiktokName}`.toLowerCase();
+        const searchText = userInput.value.toLocaleLowerCase();
+        let showUser = foundUserAttributes.includes(searchText);
 
-      if (foundUser.includes(userFilter))
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+        // make sure deleted users are hidden if isShowing is false
+        if (
+          !this.isShowing // the user does NOT want to see deleted users
+          && user.deleted == true // the user is deleted
+          )
+        {
+          showUser = false;
+        }
+
+        return showUser;
     })
     
   };
