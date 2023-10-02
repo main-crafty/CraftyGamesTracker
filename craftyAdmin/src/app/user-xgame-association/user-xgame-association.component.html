@@ -1,9 +1,23 @@
+<<<<<<< HEAD
+<mat-form-field class="example-full-width">
+          
+  <mat-label>Filter By Game</mat-label>
+    <mat-select (selectionChange)="gameFilter($event)"  name="games">
+      <mat-option *ngFor="let game of games" [value]="game">
+        {{game.gameName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+=======
 <button 
   mat-raised-button color="primary" 
   (click)="openDialog('0ms', '0ms')">
   <mat-icon fontIcon="add"></mat-icon>
   Create
 </button>
+>>>>>>> 0fa9a05dc88b55969b7183009dc9de04cd2095a9
 <input class = "filterUsersXGames" placeholder="filter usersXgames" (keyup)="userXgameStringFilter($event)">
 <section class="hideActive">
   <mat-checkbox class="example-margin" (change)="hideActive()">Hide Active</mat-checkbox>
