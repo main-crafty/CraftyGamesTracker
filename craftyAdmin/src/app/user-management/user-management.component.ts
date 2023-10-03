@@ -24,12 +24,15 @@ export class UserManagementComponent implements OnInit {
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   dataSource: User[] = [];
   users: User[] = [];
+  searchText = '';
 
   expandedUser: User | undefined;
   expandedUserID : number | undefined;
   expandedUsername : string | undefined;
   expandedNickname : string | undefined;
   expandedTiktokName : string | undefined;
+
+    isShowing : boolean = false //shows deleted users
   
   constructor( private dataService: DataService, public dialog: MatDialog){}
   
@@ -43,8 +46,6 @@ export class UserManagementComponent implements OnInit {
       return isDeletedValue === 0;
     });
     });
-
-//console.log('I LIVE');
 
     if (this.expandedUser !== undefined)
     {
@@ -68,7 +69,6 @@ export class UserManagementComponent implements OnInit {
       this.expandedTiktokName = user.tiktokName;
     }
     event.stopPropagation();
-    console.log(user, event, "event");
   }
   
 
@@ -132,35 +132,14 @@ export class UserManagementComponent implements OnInit {
     )
   };
 
-  
-  isShowing : boolean = false //shows deleted users
-  deletedCounter: number = 0;
-
   showDeleted(){
-    this.toggleIsShowing()
-    this.dataSource = structuredClone(this.users)
-    
-    if(this.deletedCounter + 1){
-      this.dataSource = structuredClone(this.users).filter((user)=>{
-        if(this.isShowing && this.isHiding){
-          
-          return true;
-        } else if (this.isShowing && this.isHiding === false){
-          const isDeletedValue : number = user.deleted as unknown as number; 
-          return isDeletedValue === 1
-        } else if (this.isShowing === false && this.isHiding){
-          const isDeletedValue : number = user.deleted as unknown as number;
-          return isDeletedValue === 0
-        }
-        
-      return false;
-      })
-    }
-    
-    }
+    this.toggleIsShowing();
+    this.updateTable();
+  }
+
   toggleIsShowing(){
     this.isShowing = !this.isShowing;  
-    this.deletedCounter = this.deletedCounter + 1
+//    this.deletedCounter = this.deletedCounter + 1
   }
 
   isHiding : boolean = true //hides active users
@@ -196,26 +175,30 @@ export class UserManagementComponent implements OnInit {
   userStringFilter(event: KeyboardEvent){
     const userInput : HTMLInputElement = event.target as HTMLInputElement;
 
-      this.dataSource = this.users
-      .filter((user) => {
-        const foundUserAttributes = `${user.username} ${user.nickname} ${user.tiktokName}`.toLowerCase();
-        const searchText = userInput.value.toLocaleLowerCase();
-        let showUser = foundUserAttributes.includes(searchText);
-
-        // make sure deleted users are hidden if isShowing is false
-        if (
-          !this.isShowing // the user does NOT want to see deleted users
-          && user.deleted == true // the user is deleted
-          )
-        {
-          showUser = false;
-        }
-
-        return showUser;
-    })
-    
+    this.searchText = userInput.value.toLocaleLowerCase(); 
+    this.updateTable();    
   };
 
+  updateTable(): void
+  {
+    this.dataSource = this.users
+    .filter((user) => {
+      const foundUserAttributes = `${user.username} ${user.nickname} ${user.tiktokName}`.toLowerCase();
+      //const searchText = userInput.value.toLocaleLowerCase();
+      let showUser = foundUserAttributes.includes(this.searchText);
+
+      // make sure deleted users are hidden if isShowing is false
+      if (
+        !this.isShowing // the user does NOT want to see deleted users
+        && user.deleted == true // the user is deleted
+        )
+      {
+        showUser = false;
+      }
+
+      return showUser;
+  })
+  }
   
   }
 
