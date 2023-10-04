@@ -27,5 +27,6 @@
     </tr>
     
     </table>
-    <button id="newAssociation" *ngIf="newUserId && newGameId" (click)="newAssociation()">submit association</button>
+    <!-- <button id="newAssociation" *ngIf="newUserId && newGameId" (click)="newAssociation()">submit association</button> -->
+    <button mat-raised-button color="primary" id="newAssociation" *ngIf="newUserId && newGameId" (click)="newAssociation()">Submit Association</button>
   </form>

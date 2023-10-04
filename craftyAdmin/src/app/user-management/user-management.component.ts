@@ -33,6 +33,7 @@ export class UserManagementComponent implements OnInit {
   expandedTiktokName : string | undefined;
 
     isShowing : boolean = false //shows deleted users
+    isHiding : boolean = false //hides active users
   
   constructor( private dataService: DataService, public dialog: MatDialog){}
   
@@ -131,45 +132,25 @@ export class UserManagementComponent implements OnInit {
       }, 1000
     )
   };
-
+//*************************************************************************************************************************************** */
   showDeleted(){
     this.toggleIsShowing();
     this.updateTable();
   }
 
   toggleIsShowing(){
-    this.isShowing = !this.isShowing;  
-//    this.deletedCounter = this.deletedCounter + 1
+    this.isShowing = !this.isShowing;
+    //console.log("isShowing",this.isShowing)
   }
-
-  isHiding : boolean = true //hides active users
-  hideChange : number = 0
   
   hideActive(){
-    this.dataSource = structuredClone(this.users);
-    
-    if(this.hideChange + 1){
-      this.dataSource = structuredClone(this.users).filter((user)=>{
-        if(this.isShowing && this.isHiding){
-          const deletedUsers : number = user.deleted as unknown as number;
-        return deletedUsers
-          } else if (this.isShowing && this.isHiding === false){
-           return true
-        } else if (this.isShowing === false && this.isHiding){
-          return false;
-        }
-        const hiddenUsers : number = user.deleted as unknown as number;
-        return hiddenUsers === 0;
-        
-        
-      })
-    }
-    this.toggleHideActive();
+    this.toggleIsHiding();
+    this.updateTable();
   }
 
-  toggleHideActive(){
+  toggleIsHiding(){
     this.isHiding = !this.isHiding;
-    this.hideChange = this.hideChange + 1;
+    //console.log("isHiding", this.isHiding)
   }
     
   userStringFilter(event: KeyboardEvent){
@@ -185,18 +166,28 @@ export class UserManagementComponent implements OnInit {
     .filter((user) => {
       const foundUserAttributes = `${user.username} ${user.nickname} ${user.tiktokName}`.toLowerCase();
       //const searchText = userInput.value.toLocaleLowerCase();
-      let showUser = foundUserAttributes.includes(this.searchText);
+      let showDeletedUser = foundUserAttributes.includes(this.searchText);
 
-      // make sure deleted users are hidden if isShowing is false
+      let hideActiveUser = foundUserAttributes.includes(this.searchText);
+
+      // make sure deleted users are hidden if isShowing is false 
       if (
         !this.isShowing // the user does NOT want to see deleted users
         && user.deleted == true // the user is deleted
         )
       {
-        showUser = false;
+        showDeletedUser = false;
       }
 
-      return showUser;
+      if(
+        this.isHiding // the user does NOT want to see active users
+        && user.deleted == false // the user is active
+        )
+      {
+        hideActiveUser = false;
+      }
+      //console.log("show",showDeletedUser,"**********", "hide",hideActiveUser);
+      return hideActiveUser && showDeletedUser;
   })
   }
   

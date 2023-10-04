@@ -61,8 +61,8 @@
                   <div><input formControlName="gameName" [value]="expandedGameName" placeholder="change game name" /></div>
                   <div><input formControlName="gameDescription" [value]=" expandedGameDescription"  placeholder="change game description" /></div>
                   <div><input formControlName="deleted" [value]="game.deleted"  placeholder="change deleted" /></div>
-                  <button (click)="patchedGame(game.gameID)">submit</button>
-                  <button (click)="softDeleteGame(game.gameID)">delete</button>
+                  <button mat-raised-button color="primary" (click)="patchedGame(game.gameID)">submit</button>
+                  <button mat-raised-button color="primary" (click)="softDeleteGame(game.gameID)">delete</button>
                   </div>
                 </form>
                 </div>
