@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
 import {MatDialog, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatListModule} from '@angular/material/list';
 import {MatSelectModule} from '@angular/material/select';
@@ -54,6 +55,7 @@ import { AddAssociationComponent } from './user-xgame-association/add-associatio
     MatButtonModule,
     HttpClientModule,
     FormsModule, 
+    MatAutocompleteModule,
     MatFormFieldModule, 
     MatInputModule,
     MatDialogModule,

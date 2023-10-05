@@ -1,0 +1,33 @@
+<form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Select A Game</mat-label>
+      <input type="text"
+             placeholder="Pick one"
+             aria-label="Select A Game"
+             matInput
+             [formControl]="myControl"
+             [matAutocomplete]="auto">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="gameSelected($event)">
+        <mat-option *ngFor="let option of filteredOptions " [value]="option.gameID">
+          {{option.gameName}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+
+  <div *ngIf="selectedGame">
+    <table>
+      <tr>
+        <td>Game Name:</td>
+        <td>{{selectedGame.gameName}}</td>
+      </tr>
+      <tr>
+        <td>Game Description:</td>
+        <td>{{selectedGame.gameDescription}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div *ngIf="selectedGame">
+    <textarea>{{userListText}}</textarea>
+  </div>
