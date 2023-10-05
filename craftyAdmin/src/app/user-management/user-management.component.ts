@@ -140,7 +140,6 @@ export class UserManagementComponent implements OnInit {
 
   toggleIsShowing(){
     this.isShowing = !this.isShowing;
-    //console.log("isShowing",this.isShowing)
   }
   
   hideActive(){
@@ -150,7 +149,6 @@ export class UserManagementComponent implements OnInit {
 
   toggleIsHiding(){
     this.isHiding = !this.isHiding;
-    //console.log("isHiding", this.isHiding)
   }
     
   userStringFilter(event: KeyboardEvent){
@@ -190,8 +188,7 @@ export class UserManagementComponent implements OnInit {
       return hideActiveUser && showDeletedUser;
   })
   }
-  
-  }
+}
 
   
     

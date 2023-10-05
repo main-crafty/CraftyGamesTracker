@@ -1,4 +1,7 @@
-<button mat-raised-button color="primary" (click)="openDialog('0ms', '0ms')">
+<button 
+  mat-raised-button 
+  color="primary" 
+  (click)="openDialog('0ms', '0ms')">
   <mat-icon fontIcon="add"></mat-icon>
   Create
 </button>
@@ -14,7 +17,6 @@
   [dataSource]="dataSource"
   multiTemplateDataRows
   class="mat-elevation-z8"
-  
 >
 
   <ng-container
@@ -76,6 +78,7 @@
 
           <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
           <tr
+            [class]="{'deleted':(element.deleted===1)}"
             mat-row
             *matRowDef="let element; columns: columnsToDisplayWithExpand;"
             class="example-element-row"

@@ -74,6 +74,7 @@
           <tr
             mat-row
             *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+            [class]="{'deleted' : (element.deleted ===1)}"
             class="example-element-row"
             [class.example-expanded-row]="expandedGame === element"
             (click)="expandedGame = expandedGame === element ? null : element; toggleGame(element, $event)"

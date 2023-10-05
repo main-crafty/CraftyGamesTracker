@@ -25,10 +25,15 @@ export class GameManagementComponent implements OnInit {
   dataSource: Game[] = [];
   games: Game[] = [];
 
+  searchText='';
+
   expandedGame: Game | undefined;
   expandedGameID: number| undefined;
   expandedGameName: string | undefined;
   expandedGameDescription: string | undefined;
+
+  isShowing : boolean = false //shows deleted games
+  isHiding : boolean = false //hides active games
   
   constructor( private dataService: DataService,public dialog: MatDialog){}
   
@@ -111,81 +116,60 @@ softDeleteGame(gameID : number){
     }, 1000
   )
 }
-
-isShowing : boolean = false //shows deleted games
-deletedCounter: number = 0;
-
+//************************************************************************************************************************** */
 showDeleted(){
-  this.toggleIsShowing()
-  this.dataSource = structuredClone(this.games)
-  
-  if(this.deletedCounter + 1){
-    this.dataSource = structuredClone(this.games).filter((game)=>{
-      if(this.isShowing && this.isHiding){
-        
-        return true;
-      } else if (this.isShowing && this.isHiding === false){
-        const isDeletedValue : number = game.deleted as unknown as number; 
-        return isDeletedValue === 1
-      } else if (this.isShowing === false && this.isHiding){
-        const isDeletedValue : number = game.deleted as unknown as number;
-        return isDeletedValue === 0
-      }
-      
-    return false;
-    })
-  }
-  
-  }
+  this.toggleIsShowing();
+  this.updateTable();
+}
+
 toggleIsShowing(){
   this.isShowing = !this.isShowing;  
-  this.deletedCounter = this.deletedCounter + 1
 }
-
-isHiding : boolean = true //hides active games
-hideChange : number = 0
 
 hideActive(){
-  this.dataSource = structuredClone(this.games);
-  
-  if(this.hideChange + 1){
-    this.dataSource = structuredClone(this.games).filter((game)=>{
-      if(this.isShowing && this.isHiding){
-        const deletedGames : number = game.deleted as unknown as number;
-      return deletedGames
-        } else if (this.isShowing && this.isHiding === false){
-         return true
-      } else if (this.isShowing === false && this.isHiding){
-        return false;
-      }
-      const hiddenGames : number = game.deleted as unknown as number;
-      return hiddenGames === 0;
-      
-      
-    })
-  }
-  this.toggleHideActive();
+  this.toggleIsHiding();
+  this.updateTable();
 }
 
-toggleHideActive(){
+toggleIsHiding(){
   this.isHiding = !this.isHiding;
-  this.hideChange = this.hideChange + 1;
 }
 
 gameStringFilter(event:any){
-  const gameInput : HTMLInputElement = document.querySelector(".filterGames") as unknown as HTMLInputElement;
-  const gameFilter = gameInput.value.toLocaleLowerCase();
+  const gameInput : HTMLInputElement = event.target as HTMLInputElement;
 
-    this.dataSource = structuredClone(this.games).filter((game)=>{
-    const foundNames = game.gameName;
-    const foundName = foundNames.toLocaleLowerCase();
-    
-    if(foundName.includes(gameFilter)){
-      return true
-    }else{
-      return false
-    }
-    })
-  
+    this.searchText = gameInput.value.toLocaleLowerCase(); 
+    this.updateTable();  
 }
+
+updateTable(): void
+  {
+    this.dataSource = this.games
+    .filter((game) => {
+      const foundGameAttributes = `${game.gameName} ${game.gameDescription}`.toLowerCase();
+      //const searchText = userInput.value.toLocaleLowerCase();
+      let showDeletedGame = foundGameAttributes.includes(this.searchText);
+
+      let hideActiveGame = foundGameAttributes.includes(this.searchText);
+
+      // make sure deleted games are hidden if isShowing is false 
+      if (
+        !this.isShowing // the user does NOT want to see deleted games
+        && game.deleted == true // the user is deleted
+        )
+      {
+        showDeletedGame = false;
+      }
+
+      if(
+        this.isHiding // the user does NOT want to see active games
+        && game.deleted == false // the user is active
+        )
+      {
+        hideActiveGame = false;
+      }
+      
+      return hideActiveGame && showDeletedGame;
+  })
+  }
 }
