@@ -43,6 +43,11 @@ export class UserXgameAssociationComponent implements OnInit{
 
   expandedGameID: number | undefined;
   expandedGamename : string | undefined;
+
+  isHiding : boolean = false; //hides active users
+  isShowing : boolean = false; //shows deleted users
+
+  searchText : string = '';
   
 
   constructor( private dataService: DataService, public dialog: MatDialog){}
@@ -148,18 +153,12 @@ export class UserXgameAssociationComponent implements OnInit{
   {
     const selectedUser: User = event.value;
     this.newUserID = selectedUser.userID;
-    // console.log(event, "event")
-    // console.log(selectedUser, selectedUser.username, "selectedUser");
-    // console.log(this.newUserID, "newUserID");
   }
 
   gameChange(event: MatSelectChange) : void
   {
     const selectedGame: Game = event.value;
     this.newGameID = selectedGame.gameID;
-    // console.log(event, "event");
-    // console.log(selectedGame, selectedGame.gameName, "selectedGame")
-    // console.log(this.newGameID, "newGameID");
   }
 
   patchedUserXGame(userXgameID : number){
@@ -202,84 +201,32 @@ export class UserXgameAssociationComponent implements OnInit{
     )
   };
 
-  isShowing : boolean = true //shows deleted users
-  deletedCounter: number = 0;
+  //****************************************************************************************************************************** */
 
   showDeleted(){
-    
-    this.dataSource = structuredClone(this.usersXgames)
-    
-      if(this.deletedCounter + 1){
-        this.dataSource = structuredClone(this.usersXgames).filter((userXgame)=>{
-          if(this.isShowing && this.isHiding){
-            return true;
-         } else if (this.isShowing && this.isHiding === false){
-            const isDeletedValue : number = userXgame.deleted as unknown as number; 
-            return isDeletedValue === 0
-         } else if (this.isShowing === false && this.isHiding){
-            const isDeletedValue : number = userXgame.deleted as unknown as number;
-            return isDeletedValue === 1
-        }
-        
-      return false;
-      })
-      }
-    this.toggleIsShowing()
-    }
+    this.isShowing = !this.isShowing;
+    this.updateTable();
+  }
 
   toggleIsShowing(){
     this.isShowing = !this.isShowing;  
-    this.deletedCounter = this.deletedCounter + 1
+    this.updateTable();
   }
-
-  isHiding : boolean = true //hides active users
-  hideChange : number = 0
   
   hideActive(){
-    this.dataSource = structuredClone(this.usersXgames);
-    
-    if(this.hideChange + 1){
-      this.dataSource = structuredClone(this.usersXgames).filter((userXgame)=>{
-        if(this.isShowing && this.isHiding){
-          const deletedUsers : number = userXgame.deleted as unknown as number;
-          return deletedUsers
-        } else if (this.isShowing && this.isHiding === false){
-           return true
-        } else if (this.isShowing === false && this.isHiding){
-          return false;
-        }
-      const hiddenUsers : number = userXgame.deleted as unknown as number;
-      return hiddenUsers === 0;
-        
-        
-      })
-    }
-    this.toggleHideActive();
+    this.isHiding = !this.isHiding;
+    this.updateTable();
   }
 
   toggleHideActive(){
     this.isHiding = !this.isHiding;
-    this.hideChange = this.hideChange + 1;
   } 
 
   userXgameStringFilter(event:any){
-    const userXGameInput : HTMLInputElement = document.querySelector(".filterUsersXGames") as unknown as HTMLInputElement;
-    const userXGameFilter = userXGameInput.value.toLocaleLowerCase()
+    const userXgameInput : HTMLInputElement = event.target as HTMLInputElement;
 
-      this.dataSource = structuredClone(this.usersXgames).filter((userXgame : UiUserXGame)=>{
-      console.log(userXgame.username)
-      const foundUsersXGames = userXgame.username as string;
-      const foundUserXGame = foundUsersXGames.toLocaleLowerCase();
-
-      if (foundUserXGame.includes(userXGameFilter))
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-    })
+    this.searchText = userXgameInput.value.toLocaleLowerCase(); 
+    this.updateTable(); 
   }
 
   gameFilter(event: MatSelectChange):void
@@ -296,5 +243,36 @@ export class UserXgameAssociationComponent implements OnInit{
         return false
       }
     })
+  }
+
+  updateTable(): void
+  {
+    this.dataSource = this.uiUsersXgames
+    .filter((userXgame) => {
+      const foundUserAttributes = `${userXgame.username} ${userXgame.gameName}`.toLowerCase();
+
+      let showDeletedUserXGame = foundUserAttributes.includes(this.searchText);
+
+      let hideActiveUserXGame = foundUserAttributes.includes(this.searchText);
+
+      // make sure deleted userXgames are hidden if isShowing is false 
+      if (
+        !this.isShowing // the user does NOT want to see deleted userXgames
+        && userXgame.deleted == true // the userXgame is deleted
+        )
+      {
+        showDeletedUserXGame = false;
+      };
+
+      if(
+        this.isHiding // the user does NOT want to see active userXgames
+        && userXgame.deleted == false // the userXgame is active
+        )
+      {
+        hideActiveUserXGame = false;
+      };
+
+      return hideActiveUserXGame && showDeletedUserXGame;
+  })
   }
 }
