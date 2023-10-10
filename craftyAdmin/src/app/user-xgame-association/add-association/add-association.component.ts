@@ -48,16 +48,12 @@ export class AddAssociationComponent {
   {
     const selectedUser: User = event.value;
     this.newUserId = selectedUser.userID;
-    console.log(this.userChange);
-    console.log(this.newUserId);
   }
 
   gameChange(event: MatSelectChange): void
   {
     const selectedGame: Game = event.value;
     this.newGameId = selectedGame.gameID;
-    console.log(this.gameChange);
-    console.log(this.newUserId);
   }
   
   newAssociation(){
@@ -80,6 +76,7 @@ export class AddAssociationComponent {
       this.dataService.setUserXGames();
       }, 1000
     )
+    console.log("duplicate")
   this.dialogRef.close();
   };
 

@@ -132,6 +132,30 @@ export class UserManagementComponent implements OnInit {
       }, 1000
     )
   };
+
+  restoreDeleted(userID : number){
+
+    const username : string = this.userPatchForm.controls.username.value as string;
+    const nickname : string = this.userPatchForm.controls.nickname.value as string;
+    const tiktok: boolean = this.userPatchForm.controls.tiktok.value as boolean;
+    const tiktokName : string = this.userPatchForm.controls.tiktokName.value as string;
+    const deleted : boolean = 0 as unknown as boolean;
+
+    const unDeleteUser : Partial<User> = {userID, username, nickname, tiktok, tiktokName, deleted}
+
+    this.dataService.patchUser(
+      unDeleteUser
+    );
+
+    setTimeout(
+      ()=>{
+        this.dataService.setUsers()
+      }, 1000
+    )
+
+    this.updateTable();
+
+  }
 //*************************************************************************************************************************************** */
   showDeleted(){
     this.toggleIsShowing();

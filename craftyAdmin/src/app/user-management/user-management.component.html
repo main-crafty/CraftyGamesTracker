@@ -69,6 +69,7 @@
                 
                   <button mat-raised-button color="primary" (click)="patchedUser(user.userID)">submit</button>
                   <button mat-raised-button color="primary" (click)="softDeleteUser(user.userID)">delete</button>
+                  <button mat-raised-button color="primary" *ngIf="(user.deleted === 1)" (click)="restoreDeleted(user.userID)">Restore deleted</button>
                   </div>
                 </form>
                 </div>
