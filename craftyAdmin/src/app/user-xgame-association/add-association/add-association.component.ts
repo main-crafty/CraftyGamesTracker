@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { DataService } from 'src/app/data.service';
-import { UserXGame, UiUserXGame, User, Game } from 'src/app/interfaces';
-import { FormControl, FormControlName, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UserXGame, User, Game } from 'src/app/interfaces';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 
 @Component({
@@ -14,7 +14,6 @@ export class AddAssociationComponent {
   
   userXgames : UserXGame[] = []; 
   dataSource : UserXGame[] = [];
-  //UiUserXGame : UiUserXGame[] = [];
   users : User[] = [];
   games : Game[] = [];
   selectedUserValue : User[] = [];
@@ -24,8 +23,6 @@ export class AddAssociationComponent {
 
   newUserId: number | undefined ;
   newGameId: number | undefined ;
-
-  //displayUser = this.User.find(user => user.username)
 
   UserXGameForm = new FormGroup(
     {

@@ -143,10 +143,11 @@ export class DataService{
   postUserXGames(userXgame : UserXGame): Observable<UserXGame>{
     const userXGamePost : Observable<UserXGame> = this.http.post<UserXGame>('/api/api/usersXgames/usersXgames.php', userXgame);
     
-    const sub:Subscription = userXGamePost.subscribe((userXgame:UiUserXGame)=>{
-      this.userXGamePostObservable.next(userXgame);
-      sub.unsubscribe();
-    })
+    // const sub:Subscription = userXGamePost.subscribe((userXgame:UiUserXGame)=>{
+    //   this.userXGamePostObservable.next(userXgame);
+    //   console.log("userXgame", userXgame);
+    //   sub.unsubscribe();
+    // })
     return userXGamePost; 
   }
 
