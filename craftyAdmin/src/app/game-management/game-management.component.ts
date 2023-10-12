@@ -156,6 +156,7 @@ updateTable(): void
       if (
         !this.isShowing // the user does NOT want to see deleted games
         && game.deleted == true // the user is deleted
+        && this.searchText !== undefined
         )
       {
         showDeletedGame = false;
@@ -164,6 +165,7 @@ updateTable(): void
       if(
         this.isHiding // the user does NOT want to see active games
         && game.deleted == false // the user is active
+        && this.searchText !== undefined
         )
       {
         hideActiveGame = false;

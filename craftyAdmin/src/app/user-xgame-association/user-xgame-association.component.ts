@@ -259,6 +259,7 @@ export class UserXgameAssociationComponent implements OnInit{
       if (
         !this.isShowing // the user does NOT want to see deleted userXgames
         && userXgame.deleted == true // the userXgame is deleted
+        && this.searchText !== undefined
         )
       {
         showDeletedUserXGame = false;
@@ -267,6 +268,7 @@ export class UserXgameAssociationComponent implements OnInit{
       if(
         this.isHiding // the user does NOT want to see active userXgames
         && userXgame.deleted == false // the userXgame is active
+        && this.searchText !== undefined
         )
       {
         hideActiveUserXGame = false;

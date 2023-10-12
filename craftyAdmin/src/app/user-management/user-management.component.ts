@@ -193,17 +193,28 @@ export class UserManagementComponent implements OnInit {
       let hideActiveUser = foundUserAttributes.includes(this.searchText);
 
       // make sure deleted users are hidden if isShowing is false 
-      if (
-        !this.isShowing // the user does NOT want to see deleted users
-        && user.deleted == true // the user is deleted
+
+      if(
+        !this.isShowing 
+        && user.deleted == true
+        && this.searchText !== undefined
         )
       {
-        showDeletedUser = false;
+        showDeletedUser = false
       }
+
+      // if (
+      //   !this.isShowing // the user does NOT want to see deleted users
+      //   && user.deleted == true // the user is deleted
+      //   )
+      // {
+      //   showDeletedUser = false;
+      // }
 
       if(
         this.isHiding // the user does NOT want to see active users
         && user.deleted == false // the user is active
+        && this.searchText !== undefined
         )
       {
         hideActiveUser = false;
