@@ -19,6 +19,7 @@ export interface UserXGame{
     userXgameID?: number;
     userID: number;
     gameID: number;
+    quantity: number;
     deleted?: boolean;
 }
 
@@ -29,5 +30,6 @@ export interface UiUserXGame
     username?: string;
     gameID: number;
     gameName?: string;
+    quantity: number;
     deleted?: boolean;
 }

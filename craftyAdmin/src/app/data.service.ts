@@ -16,9 +16,9 @@ export class DataService{
   userXGames : UserXGame[] = [];
 
   //http GET request variables
-  userReq = this.http.get<User>('/api/api/users/users.php');
-  gameReq = this.http.get<Game>('/api/api/games/games.php');
-  userXGameReq = this.http.get<UserXGame>('/api/api/usersXgames/usersXgames.php');
+  userReq = this.http.get<User>('/api/users/users.php');
+  gameReq = this.http.get<Game>('/api/games/games.php');
+  userXGameReq = this.http.get<UserXGame>('/api/usersXgames/usersXgames.php');
 
   // GET request Observables
   usersObservable: BehaviorSubject<User[]> = new BehaviorSubject(this.users);
@@ -64,7 +64,7 @@ export class DataService{
   }
 
   postUser(user : User): Observable<User>{
-    const userPost : Observable<User> = this.http.post<User>('/api/api/users/users.php', user);
+    const userPost : Observable<User> = this.http.post<User>('/api/users/users.php', user);
     const sub:Subscription = userPost.subscribe((user:User)=>{
       this.usersPostObservable.next(user);
       sub.unsubscribe();
@@ -73,7 +73,7 @@ export class DataService{
   }
 
   deleteUser(userID: number): Observable<User>{
-    const userDel : Observable<any> = this.http.delete(`/api/api/users/users.php?userID=${userID}`);
+    const userDel : Observable<any> = this.http.delete(`/api/users/users.php?userID=${userID}`);
     const sub:Subscription = userDel.subscribe((user:User)=>{
       this.userDeleteObservable.next(user);
       sub.unsubscribe();
@@ -82,7 +82,7 @@ export class DataService{
   }
 
   patchUser(userChanges: Partial<User>): Observable<User>{
-    const userPatch : Observable<any> = this.http.patch(`/api/api/users/users.php`, userChanges)
+    const userPatch : Observable<any> = this.http.patch(`/api/users/users.php`, userChanges)
     const sub:Subscription = userPatch.subscribe((user:User)=>{
       console.log(user);
       this.userPatchObservable.next(user);
@@ -104,7 +104,7 @@ export class DataService{
     }
 
   postGame(game : Game): Observable<Game>{
-    const gamePost : Observable<Game> = this.http.post<Game>('/api/api/games/games.php', game);
+    const gamePost : Observable<Game> = this.http.post<Game>('/api/games/games.php', game);
     const sub:Subscription = gamePost.subscribe((game:Game)=>{
       this.gamesPostObservable.next(game);
       sub.unsubscribe();
@@ -113,7 +113,7 @@ export class DataService{
   }
 
   deleteGame(gameID: number): Observable<Game>{
-    const gameDel : Observable<any> = this.http.delete(`/api/api/games/games.php?gameID=${gameID}`);
+    const gameDel : Observable<any> = this.http.delete(`/api/games/games.php?gameID=${gameID}`);
     const sub:Subscription = gameDel.subscribe((game: Game)=>{
       this.gameDeleteObservable.next(game);
       sub.unsubscribe();
@@ -122,7 +122,7 @@ export class DataService{
   }
 
   patchGame(gameChanges: Partial<Game>): Observable<Game>{
-    const gamePatch: Observable<any> = this.http.patch(`/api/api/games/games.php`, gameChanges)
+    const gamePatch: Observable<any> = this.http.patch(`/api/games/games.php`, gameChanges)
     const sub:Subscription = gamePatch.subscribe((game:Game)=>{
       this.gamePatchObservable.next(game)
     })
@@ -141,18 +141,13 @@ export class DataService{
   }
 
   postUserXGames(userXgame : UserXGame): Observable<UserXGame>{
-    const userXGamePost : Observable<UserXGame> = this.http.post<UserXGame>('/api/api/usersXgames/usersXgames.php', userXgame);
-    
-    // const sub:Subscription = userXGamePost.subscribe((userXgame:UiUserXGame)=>{
-    //   this.userXGamePostObservable.next(userXgame);
-    //   console.log("userXgame", userXgame);
-    //   sub.unsubscribe();
-    // })
+    const userXGamePost : Observable<UserXGame> = this.http.post<UserXGame>('/api/usersXgames/usersXgames.php', userXgame);
+
     return userXGamePost; 
   }
 
   deleteUserXGames(userXgameID : number): Observable<UserXGame>{
-    const userXgameDel : Observable<any> = this.http.delete(`/api/api/usersXgames/usersXgames.php?userXgameID=${userXgameID}`);
+    const userXgameDel : Observable<any> = this.http.delete(`/api/usersXgames/usersXgames.php?userXgameID=${userXgameID}`);
     const sub:Subscription = userXgameDel.subscribe((userXgameID: UserXGame)=>{
       this.userXgameDeleteObservable.next(userXgameID);
       sub.unsubscribe();
@@ -161,7 +156,7 @@ export class DataService{
   }
 
   patchUserXGame(userXgameChanges: Partial<UserXGame>): Observable<UserXGame>{
-    const userXGamePatch : Observable<any> = this.http.patch(`/api/api/usersXgames/usersXgames.php`, userXgameChanges);
+    const userXGamePatch : Observable<any> = this.http.patch(`/api/usersXgames/usersXgames.php`, userXgameChanges);
     const sub:Subscription = userXGamePatch.subscribe((userXgame: UserXGame)=>{
       this.userXGamePatchObservable.next(userXgame);
       sub.unsubscribe();

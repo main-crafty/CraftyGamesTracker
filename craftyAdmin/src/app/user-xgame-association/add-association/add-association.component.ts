@@ -24,17 +24,21 @@ export class AddAssociationComponent {
   newUserId: number | undefined ;
   newGameId: number | undefined ;
 
+  userXgameQuantity: UserXGame[] = [];
+  newUserXgameQuantity: number = 1;
+
   UserXGameForm = new FormGroup(
     {
     userID: new FormControl(0),
-    gameID: new FormControl(0)
+    gameID: new FormControl(0),
+    uXgQuantity: new FormControl(1)
 
     }
   );
   
   constructor(public dialogRef: MatDialogRef<AddAssociationComponent>, private dataService: DataService){
     dataService.usersObservable.subscribe((users : User[])=>{
-      this.users = users;
+      this.users = users; 
     })
     dataService.gamesObservable.subscribe((games : Game[])=>{
       this.games = games;
@@ -51,6 +55,20 @@ export class AddAssociationComponent {
   {
     const selectedGame: Game = event.value;
     this.newGameId = selectedGame.gameID;
+    console.log(this.newGameId, "gameId")
+  }
+
+  changeQuantity(event: any) : void
+  {
+    let associationQuantity : number = 1;
+    if (event.target && event.target.value)
+    {
+      associationQuantity = parseInt(event.target.value);
+    }
+    
+    this.newUserXgameQuantity = associationQuantity;
+    
+    console.log(associationQuantity, event, "userXgameQuantity"); 
   }
   
   newAssociation(){
@@ -59,9 +77,12 @@ export class AddAssociationComponent {
 
     const gameID : number = this.newGameId as number;
 
+    const quantity: number = this.newUserXgameQuantity as number;
+
       this.dataService.postUserXGames({
         userID,
         gameID,
+        quantity
         
       }).subscribe((userXgame)=>{
         console.log(userXgame)
@@ -73,7 +94,6 @@ export class AddAssociationComponent {
       this.dataService.setUserXGames();
       }, 1000
     )
-    console.log("duplicate")
   this.dialogRef.close();
   };
 

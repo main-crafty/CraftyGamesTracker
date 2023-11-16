@@ -27,6 +27,12 @@
     </tr>
     
     </table>
-    <!-- <button id="newAssociation" *ngIf="newUserId && newGameId" (click)="newAssociation()">submit association</button> -->
+
+    <span>Quantity x </span><input type="number" (change)="changeQuantity($event)" name="uXgQuantity">
+
+    <div></div>
+
     <button mat-raised-button color="primary" id="newAssociation" *ngIf="newUserId && newGameId" (click)="newAssociation()">Submit Association</button>
+    
+    
   </form>

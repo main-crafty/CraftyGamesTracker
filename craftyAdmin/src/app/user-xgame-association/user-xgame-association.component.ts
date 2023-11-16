@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddAssociationComponent } from './add-association/add-association.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
+
 import { filter } from 'rxjs';
 
 @Component({
@@ -146,6 +147,7 @@ export class UserXgameAssociationComponent implements OnInit{
   userXGamePatchForm = new FormGroup({
     userID : new FormControl(0),
     gameID : new FormControl(0),
+    quantity: new FormControl(0),
     deleted : new FormControl(false)
   });
 
@@ -159,6 +161,10 @@ export class UserXgameAssociationComponent implements OnInit{
   {
     const selectedGame: Game = event.value;
     this.newGameID = selectedGame.gameID;
+  }
+
+  quantityChange(){
+
   }
 
   patchedUserXGame(userXgameID : number){

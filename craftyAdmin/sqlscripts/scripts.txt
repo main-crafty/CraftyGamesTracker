@@ -23,6 +23,7 @@ CREATE TABLE `userXgames` (
   `userXgameID` int AUTO_INCREMENT NOT NULL,
   `userID` int NOT NULL,
   `gameID` int NOT NULL,
+  `quantity` int NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   primary key (userXgameID),
   foreign key (userID) references users(userID),

@@ -64,12 +64,16 @@
             $data = json_decode($json);
             $userID = $data -> userID;
             $gameID = $data -> gameID;
+            $quantity = $data -> quantity;
             $deleted = $data -> deleted;
 
-            $myData = "INSERT INTO userXgames (userID, gameID, deleted)
-            VALUES ('$userID', '$gameID', '$deleted')"; 
+            $myData = "INSERT INTO userXgames (userID, gameID, quantity, deleted)
+            VALUES ('$userID', '$gameID', '$quantity','$deleted')"; 
             $data -> SQL = $myData;
-            $conn -> exec($myData);
+            
+            for($x = 0; $x < $quantity; $x++){
+                $conn -> exec($myData);
+            };
         }catch(PDOException $error){
             $errormsg = $error -> getMessage();
             $errorstr = "Post error: ";

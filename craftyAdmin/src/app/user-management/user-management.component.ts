@@ -156,7 +156,7 @@ export class UserManagementComponent implements OnInit {
     this.updateTable();
 
   }
-//*************************************************************************************************************************************** */
+//***************************************************************************************************************************************  */
   showDeleted(){
     this.toggleIsShowing();
     this.updateTable();
@@ -187,12 +187,10 @@ export class UserManagementComponent implements OnInit {
     this.dataSource = this.users
     .filter((user) => {
       const foundUserAttributes = `${user.username} ${user.nickname} ${user.tiktokName}`.toLowerCase();
-      //const searchText = userInput.value.toLocaleLowerCase();
+      
       let showDeletedUser = foundUserAttributes.includes(this.searchText);
 
       let hideActiveUser = foundUserAttributes.includes(this.searchText);
-
-      // make sure deleted users are hidden if isShowing is false 
 
       if(
         !this.isShowing 
@@ -203,14 +201,6 @@ export class UserManagementComponent implements OnInit {
         showDeletedUser = false
       }
 
-      // if (
-      //   !this.isShowing // the user does NOT want to see deleted users
-      //   && user.deleted == true // the user is deleted
-      //   )
-      // {
-      //   showDeletedUser = false;
-      // }
-
       if(
         this.isHiding // the user does NOT want to see active users
         && user.deleted == false // the user is active
@@ -219,7 +209,6 @@ export class UserManagementComponent implements OnInit {
       {
         hideActiveUser = false;
       }
-      //console.log("show",showDeletedUser,"**********", "hide",hideActiveUser);
       return hideActiveUser && showDeletedUser;
   })
   }
