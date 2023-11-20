@@ -55,7 +55,6 @@ export class AddAssociationComponent {
   {
     const selectedGame: Game = event.value;
     this.newGameId = selectedGame.gameID;
-    console.log(this.newGameId, "gameId")
   }
 
   changeQuantity(event: any) : void
@@ -67,8 +66,6 @@ export class AddAssociationComponent {
     }
     
     this.newUserXgameQuantity = associationQuantity;
-    
-    console.log(associationQuantity, event, "userXgameQuantity"); 
   }
   
   newAssociation(){
@@ -85,7 +82,6 @@ export class AddAssociationComponent {
         quantity
         
       }).subscribe((userXgame)=>{
-        console.log(userXgame)
       }
       )
 
