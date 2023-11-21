@@ -1,0 +1,28 @@
+ <form class="example-form" [formGroup]="userForm">
+
+    <div>Create new user</div>
+    <table class="example-full-width" cellspacing="0"><tr>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>username</mat-label>
+        <input matInput placeholder="username" formControlName="username">
+      </mat-form-field></td>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>nickname</mat-label>
+        <input matInput placeholder="nickname" formControlName="nickname">
+      </mat-form-field></td>
+    </tr>
+    
+    <tr>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>tiktok</mat-label>
+        <input matInput placeholder="tiktok" formControlName="tiktok">
+     </mat-form-field></td>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>tiktokName</mat-label>
+        <input matInput placeholder="tiktokName" formControlName="tiktokName">
+    </mat-form-field></td>
+  </tr>
+    </table>
+
+    <button mat-raised-button color="primary" (click)="newUser()">submit user</button>
+  </form>

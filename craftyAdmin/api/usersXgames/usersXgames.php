@@ -14,7 +14,7 @@
     try{
         $refSQL= $conn -> prepare("ALTER TABLE userXgames 
         ADD FOREIGN KEY (userID) REFERENCES users(userID),
-        ADD FOREIGN KEY (gameID) REFERENCES games(game_id)");
+        ADD FOREIGN KEY (gameID) REFERENCES games(gameID)");
         $refSQL -> execute();
         $result = $refSQL->setFetchMode(PDO::FETCH_ASSOC);
         $myData = $refSQL->fetchAll();
@@ -64,12 +64,16 @@
             $data = json_decode($json);
             $userID = $data -> userID;
             $gameID = $data -> gameID;
+            $quantity = $data -> quantity;
             $deleted = $data -> deleted;
 
-            $myData = "INSERT INTO userXgames (userID, gameID, deleted)
-            VALUES ('$userID', '$gameID', '$deleted')"; 
+            $myData = "INSERT INTO userXgames (userID, gameID, quantity, deleted)
+            VALUES ('$userID', '$gameID', '$quantity','$deleted')"; 
             $data -> SQL = $myData;
-            $conn -> exec($myData);
+            
+            for($x = 0; $x < $quantity; $x++){
+                $conn -> exec($myData);
+            };
         }catch(PDOException $error){
             $errormsg = $error -> getMessage();
             $errorstr = "Post error: ";
@@ -79,7 +83,8 @@
         echo $myJson; 
     } else if($_SERVER["REQUEST_METHOD"]==="DELETE"){
         try{
-            $myData = "UPDATE userXgames SET deleted=1 WHERE userXgameID = ${userXgamesID}";
+            $userXgamesID = $_GET["userXgameID"];
+            $myData = "UPDATE userXgames SET deleted=1 WHERE userXgameID = $userXgamesID";
             $data-> SQL = $myData;
             $conn -> exec($myData);
         }catch(PDOException $error){
@@ -89,6 +94,7 @@
         }
     $myJson = json_encode($data);
     echo $myJson;
+
     } else if($_SERVER["REQUEST_METHOD"]==="PUT"){
         $json = file_get_contents("php://input");
         $data = json_decode($json);

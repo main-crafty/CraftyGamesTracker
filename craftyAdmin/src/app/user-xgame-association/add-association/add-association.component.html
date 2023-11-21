@@ -1,0 +1,38 @@
+<form class="example-form" [formGroup]="UserXGameForm">
+
+    <div>Create new association</div>
+    <table class="example-full-width" cellspacing="0"><tr>
+      <td>
+        <mat-form-field class="example-full-width">
+          
+          <mat-label>Select User</mat-label>
+            <mat-select (selectionChange)="userChange($event)"  name="users">
+              <mat-option *ngFor="let user of users" [value]="user">
+                {{user.username}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+      </td> 
+      
+          
+          <td><mat-form-field class="example-full-width">
+            
+                <mat-label>Select Game</mat-label>
+                <mat-select (selectionChange)="gameChange($event)" name="games">
+                  <mat-option *ngFor="let game of games" [value]="game" >
+                    {{game.gameName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field></td>
+    </tr>
+    
+    </table>
+
+    <span>Quantity x </span><input type="number" (change)="changeQuantity($event)" name="uXgQuantity">
+
+    <div></div>
+
+    <button mat-raised-button color="primary" id="newAssociation" *ngIf="newUserId && newGameId" (click)="newAssociation()">Submit Association</button>
+    
+    
+  </form>

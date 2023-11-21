@@ -1,0 +1,18 @@
+<form class="example-form" [formGroup]="gameForm">
+
+    <div>Create new game</div>
+    <table class="example-full-width" cellspacing="0"><tr>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>gameName</mat-label>
+        <input matInput placeholder="gameName" formControlName="gameName">
+      </mat-form-field></td>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>gameDescription</mat-label>
+        <input matInput placeholder="gameDescription" formControlName="gameDescription">
+      </mat-form-field></td>
+    </tr>
+
+    </table>
+
+    <button mat-raised-button color="primary" (click)="newGame()">submit game</button>
+  </form>

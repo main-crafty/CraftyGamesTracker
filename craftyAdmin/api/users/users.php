@@ -12,6 +12,7 @@
     $username=$_GET["username"];
     $nickname=$_GET["nickname"];
     $tiktok=$_GET["tiktok"];
+    $tiktokName=$_GET["tiktokName"];
     $deleted=$_GET["deleted"];
 
     if($_SERVER["REQUEST_METHOD"]==="GET" && $userID !== null){
@@ -51,10 +52,11 @@
             $username = $data -> username;
             $nickname = $data -> nickname;
             $tiktok = $data -> tiktok;
+            $tiktokName = $data -> tiktokName;
             $deleted = $data -> deleted;
 
-            $myData = "INSERT INTO users (username, nickname, tiktok, deleted)
-            VALUES ('$username','$nickname','$tiktok', '$deleted')";
+            $myData = "INSERT INTO users (username, nickname, tiktok, tiktokName, deleted)
+            VALUES ('$username','$nickname','$tiktok','$tiktokName', '$deleted')";
             $data -> SQL = $myData;
             $conn -> exec($myData);
         } catch (PDOException $error) {
@@ -66,7 +68,7 @@
         echo $myJson;
     } else if($_SERVER["REQUEST_METHOD"]==="DELETE"){
         try{
-            $myData = "UPDATE users SET deleted=1 WHERE userID = ${userID}";
+            $myData = "UPDATE users SET deleted=1 WHERE userID = $userID";
             $data-> SQL = $myData;
             $conn -> exec($myData);
         } catch(PDOException $error){
@@ -84,10 +86,11 @@
         $username = $data -> username;
         $nickname = $data -> nickname;
         $tiktok = $data -> tiktok;
+        $tiktokName = $data -> tiktokName;
         $deleted = $data -> deleted;
 
         $sql = "UPDATE users SET username = '$username', nickname = '$nickname', 
-        tiktok = '$tiktok', deleted = '$deleted' WHERE userID = '$userID'";
+        tiktok = '$tiktok', tiktokName = '$tiktokName', deleted = '$deleted' WHERE userID = '$userID'";
 
         $conn -> exec($sql);
         
@@ -106,6 +109,7 @@
         $username = $data -> username;
         $nickname = $data -> nickname;
         $tiktok = $data -> tiktok;
+        $tiktokName = $data -> tiktokName;
         $deleted = $data -> deleted;
 
         $columnValuePair = array();
@@ -120,6 +124,9 @@
         }
         if($tiktok != ""){
             array_push($columnValuePair, "tiktok = '$tiktok'");
+        }
+        if($tiktokName != ""){
+            array_push($columnValuePair, "tiktokName = '$tiktokName'");
         }
         if($deleted != ""){
             array_push($columnValuePair, "deleted = '$deleted'");
