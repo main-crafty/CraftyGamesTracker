@@ -84,7 +84,6 @@ export class DataService{
   patchUser(userChanges: Partial<User>): Observable<User>{
     const userPatch : Observable<any> = this.http.patch(`/api/users/users.php`, userChanges)
     const sub:Subscription = userPatch.subscribe((user:User)=>{
-      console.log(user);
       this.userPatchObservable.next(user);
       sub.unsubscribe();
     })

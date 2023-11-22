@@ -173,15 +173,11 @@ export class UserXgameAssociationComponent implements OnInit{
     const deleted : boolean = this.userXGamePatchForm.controls.deleted.value as boolean;
 
     const changedUserXGame : Partial<UserXGame> = {userXgameID, userID, gameID, deleted};
-    console.log(userXgameID)
-    console.log("changedUserXGame",changedUserXGame)
     this.dataService.patchUserXGame(
       changedUserXGame
     ).subscribe((userXGame)=>{
-      console.log(userXGame)
+      
     })
-
-    console.log(JSON.stringify(this.userXGamePatchForm.value))
 
     setTimeout(
       ()=>{

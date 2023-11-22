@@ -103,9 +103,6 @@ export class UserManagementComponent implements OnInit {
     this.dataService.patchUser(
       changedUser
       );
-
-    console.log(userID);
-    console.log(JSON.stringify(this.userPatchForm.value));
    
     setTimeout(
       ()=>{

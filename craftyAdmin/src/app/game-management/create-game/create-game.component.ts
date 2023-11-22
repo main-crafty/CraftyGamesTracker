@@ -30,7 +30,6 @@ constructor(public dialogRef: MatDialogRef<CreateGameComponent>, private dataSer
       gameName,
       gameDescription
     })
-    console.log(JSON.stringify(this.gameForm.value));
     
     setTimeout(()=>{
       this.dataService.gameReq.subscribe(

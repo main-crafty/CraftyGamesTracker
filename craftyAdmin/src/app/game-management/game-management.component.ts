@@ -92,8 +92,6 @@ patchedGame(gameID: number){
     changedGame
   );
 
-  console.log(JSON.stringify(this.gamePatchForm.value))
-
   setTimeout(()=>{
     this.dataService.setGames();
   }), 1000

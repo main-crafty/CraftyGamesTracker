@@ -39,7 +39,6 @@ export class CreateUserComponent {
         tiktok,
         tiktokName
       });
-      console.log(JSON.stringify(this.userForm.value));
 
       setTimeout(
         ()=>{
